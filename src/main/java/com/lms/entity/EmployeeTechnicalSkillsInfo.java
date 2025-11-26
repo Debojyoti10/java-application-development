@@ -12,7 +12,7 @@ public class EmployeeTechnicalSkillsInfo {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     private String skillName;
     private String proficiency; // beginner, intermediate, expert

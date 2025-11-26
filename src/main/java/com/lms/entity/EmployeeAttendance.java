@@ -15,7 +15,7 @@ public class EmployeeAttendance {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     @Column(nullable = false)
     private LocalDate attendanceDate;

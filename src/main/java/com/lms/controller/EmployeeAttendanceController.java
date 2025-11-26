@@ -22,7 +22,7 @@ public class EmployeeAttendanceController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<EmployeeAttendance>> getEmployeeAttendance(@PathVariable String employeeId) {
+    public ResponseEntity<List<EmployeeAttendance>> getEmployeeAttendance(@PathVariable Long employeeId) {
         List<EmployeeAttendance> attendances = attendanceService.getEmployeeAttendance(employeeId);
         return ResponseEntity.ok(attendances);
     }
@@ -36,7 +36,7 @@ public class EmployeeAttendanceController {
 
     @GetMapping("/employee/{employeeId}/date/{date}")
     public ResponseEntity<EmployeeAttendance> getAttendanceByEmployeeAndDate(
-            @PathVariable String employeeId,
+            @PathVariable Long employeeId,
             @PathVariable String date) {
         LocalDate attendanceDate = LocalDate.parse(date);
         EmployeeAttendance attendance = attendanceService.getAttendanceByEmployeeAndDate(employeeId, attendanceDate);

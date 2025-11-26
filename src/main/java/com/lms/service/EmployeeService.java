@@ -48,8 +48,8 @@ public class EmployeeService {
         return primaryRepo.findAll();
     }
 
-    public Optional<EmployeePrimaryInfo> getPrimaryInfo(String employeeId) {
-        return primaryRepo.findByEmployeeId(employeeId);
+    public Optional<EmployeePrimaryInfo> getPrimaryInfo(Long employeeId) {
+        return primaryRepo.findById(employeeId);
     }
 
     public EmployeePrimaryInfo updatePrimaryInfo(EmployeePrimaryInfo info) {
@@ -61,7 +61,7 @@ public class EmployeeService {
         return secondaryRepo.save(info);
     }
 
-    public Optional<EmployeeSecondaryInfo> getSecondaryInfo(String employeeId) {
+    public Optional<EmployeeSecondaryInfo> getSecondaryInfo(Long employeeId) {
         return secondaryRepo.findByEmployeeId(employeeId);
     }
 
@@ -70,11 +70,11 @@ public class EmployeeService {
     }
 
     // Education
-    public List<EmployeeEducationInfo> getEducation(String employeeId) {
+    public List<EmployeeEducationInfo> getEducation(Long employeeId) {
         return educationRepo.findByEmployeeId(employeeId);
     }
 
-    public EmployeeEducationInfo addEducation(String employeeId, EmployeeEducationInfo info) {
+    public EmployeeEducationInfo addEducation(Long employeeId, EmployeeEducationInfo info) {
         info.setEmployeeId(employeeId);
         return educationRepo.save(info);
     }
@@ -83,7 +83,7 @@ public class EmployeeService {
         return educationRepo.save(info);
     }
 
-    public void deleteEducation(String employeeId, Long id) {
+    public void deleteEducation(Long employeeId, Long id) {
         Optional<EmployeeEducationInfo> opt = educationRepo.findById(id);
         if (opt.isPresent()) {
             EmployeeEducationInfo education = opt.get();
@@ -102,11 +102,11 @@ public class EmployeeService {
     }
 
     // Address
-    public List<EmployeeAddressInfo> getAddresses(String employeeId) {
+    public List<EmployeeAddressInfo> getAddresses(Long employeeId) {
         return addressRepo.findByEmployeeId(employeeId);
     }
 
-    public EmployeeAddressInfo addAddress(String employeeId, EmployeeAddressInfo info) {
+    public EmployeeAddressInfo addAddress(Long employeeId, EmployeeAddressInfo info) {
         info.setEmployeeId(employeeId);
         return addressRepo.save(info);
     }
@@ -115,7 +115,7 @@ public class EmployeeService {
         return addressRepo.save(info);
     }
 
-    public void deleteAddress(String employeeId, Long id) {
+    public void deleteAddress(Long employeeId, Long id) {
         Optional<EmployeeAddressInfo> opt = addressRepo.findById(id);
         if (opt.isPresent()) {
             EmployeeAddressInfo address = opt.get();
@@ -130,11 +130,11 @@ public class EmployeeService {
     }
 
     // Bank
-    public Optional<EmployeeBankDetails> getBankDetails(String employeeId) {
+    public Optional<EmployeeBankDetails> getBankDetails(Long employeeId) {
         return bankRepo.findByEmployeeId(employeeId);
     }
 
-    public EmployeeBankDetails addBankDetails(String employeeId, EmployeeBankDetails info) {
+    public EmployeeBankDetails addBankDetails(Long employeeId, EmployeeBankDetails info) {
         info.setEmployeeId(employeeId);
         return bankRepo.save(info);
     }
@@ -144,11 +144,11 @@ public class EmployeeService {
     }
 
     // Experience
-    public List<EmployeeExperienceInfo> getExperience(String employeeId) {
+    public List<EmployeeExperienceInfo> getExperience(Long employeeId) {
         return experienceRepo.findByEmployeeId(employeeId);
     }
 
-    public EmployeeExperienceInfo addExperience(String employeeId, EmployeeExperienceInfo info) {
+    public EmployeeExperienceInfo addExperience(Long employeeId, EmployeeExperienceInfo info) {
         info.setEmployeeId(employeeId);
         return experienceRepo.save(info);
     }
@@ -157,7 +157,7 @@ public class EmployeeService {
         return experienceRepo.save(info);
     }
 
-    public void deleteExperience(String employeeId, Long id) {
+    public void deleteExperience(Long employeeId, Long id) {
         Optional<EmployeeExperienceInfo> opt = experienceRepo.findById(id);
         if (opt.isPresent()) {
             EmployeeExperienceInfo experience = opt.get();
@@ -172,11 +172,11 @@ public class EmployeeService {
     }
 
     // Skills
-    public List<EmployeeTechnicalSkillsInfo> getSkills(String employeeId) {
+    public List<EmployeeTechnicalSkillsInfo> getSkills(Long employeeId) {
         return skillsRepo.findByEmployeeId(employeeId);
     }
 
-    public EmployeeTechnicalSkillsInfo addSkill(String employeeId, EmployeeTechnicalSkillsInfo info) {
+    public EmployeeTechnicalSkillsInfo addSkill(Long employeeId, EmployeeTechnicalSkillsInfo info) {
         info.setEmployeeId(employeeId);
         return skillsRepo.save(info);
     }
@@ -185,7 +185,7 @@ public class EmployeeService {
         return skillsRepo.save(info);
     }
 
-    public void deleteSkill(String employeeId, Long id) {
+    public void deleteSkill(Long employeeId, Long id) {
         Optional<EmployeeTechnicalSkillsInfo> opt = skillsRepo.findById(id);
         if (opt.isPresent()) {
             EmployeeTechnicalSkillsInfo skill = opt.get();
@@ -200,11 +200,11 @@ public class EmployeeService {
     }
 
     // Contact
-    public List<EmployeeContactInfo> getContacts(String employeeId) {
+    public List<EmployeeContactInfo> getContacts(Long employeeId) {
         return contactRepo.findByEmployeeId(employeeId);
     }
 
-    public EmployeeContactInfo addContact(String employeeId, EmployeeContactInfo info) {
+    public EmployeeContactInfo addContact(Long employeeId, EmployeeContactInfo info) {
         info.setEmployeeId(employeeId);
         return contactRepo.save(info);
     }
@@ -213,7 +213,7 @@ public class EmployeeService {
         return contactRepo.save(info);
     }
 
-    public void deleteContact(String employeeId, Long id) {
+    public void deleteContact(Long employeeId, Long id) {
         Optional<EmployeeContactInfo> opt = contactRepo.findById(id);
         if (opt.isPresent()) {
             EmployeeContactInfo contact = opt.get();
@@ -232,8 +232,8 @@ public class EmployeeService {
         return primaryRepo.findByUsername(username);
     }
 
-    public boolean resetPassword(String employeeId, String oldPassword, String newPassword) {
-        Optional<EmployeePrimaryInfo> opt = primaryRepo.findByEmployeeId(employeeId);
+    public boolean resetPassword(Long id, String oldPassword, String newPassword) {
+        Optional<EmployeePrimaryInfo> opt = primaryRepo.findById(id);
         if (opt.isPresent()) {
             EmployeePrimaryInfo info = opt.get();
             if (passwordEncoder.matches(oldPassword, info.getPassword())) {

@@ -12,7 +12,7 @@ public class EmployeeEducationInfo {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     private String degree;
     private String university;

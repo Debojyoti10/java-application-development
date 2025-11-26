@@ -13,7 +13,7 @@ public class EmployeeSecondaryInfo {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     private LocalDate joiningDate;
     private String managerId;

@@ -13,7 +13,7 @@ public class EmployeeExperienceInfo {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     private String companyName;
     private String role;

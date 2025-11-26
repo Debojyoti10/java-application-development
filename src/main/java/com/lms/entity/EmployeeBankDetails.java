@@ -12,7 +12,7 @@ public class EmployeeBankDetails {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     private String accountNumber;
     private String bankName;

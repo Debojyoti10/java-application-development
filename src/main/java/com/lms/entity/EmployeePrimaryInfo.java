@@ -12,9 +12,6 @@ public class EmployeePrimaryInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String employeeId;
-
     private String firstName;
     private String lastName;
     private String email;
@@ -23,6 +20,7 @@ public class EmployeePrimaryInfo {
     private String gender;
     private String department;
     private String designation;
+    @Column(unique = true)
     private String username;
     private String password;
     private String status = "ACTIVE";

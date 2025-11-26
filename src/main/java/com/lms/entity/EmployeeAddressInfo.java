@@ -12,7 +12,7 @@ public class EmployeeAddressInfo {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     private String addressType; // permanent, current
     private String street;

@@ -14,7 +14,7 @@ public class MockDetails {
 
     private String mockName;
     private LocalDate date;
-    private String employeeId;
+    private Long employeeId;
     private Integer score;
     private String feedback;
 }

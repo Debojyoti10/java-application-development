@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface EmployeeAttendanceRepository extends JpaRepository<EmployeeAttendance, Long> {
 
-    List<EmployeeAttendance> findByEmployeeId(String employeeId);
+    List<EmployeeAttendance> findByEmployeeId(Long employeeId);
 
-    List<EmployeeAttendance> findByEmployeeIdAndAttendanceDate(String employeeId, LocalDate date);
+    List<EmployeeAttendance> findByEmployeeIdAndAttendanceDate(Long employeeId, LocalDate date);
 
     List<EmployeeAttendance> findByAttendanceDate(LocalDate date);
 
@@ -19,7 +19,7 @@ public interface EmployeeAttendanceRepository extends JpaRepository<EmployeeAtte
     List<EmployeeAttendance> findByMentorId(String mentorId);
 
     // Get the latest attendance record for employee and date
-    default EmployeeAttendance findLatestByEmployeeIdAndDate(String employeeId, LocalDate date) {
+    default EmployeeAttendance findLatestByEmployeeIdAndDate(Long employeeId, LocalDate date) {
         List<EmployeeAttendance> attendances = findByEmployeeIdAndAttendanceDate(employeeId, date);
         return attendances.isEmpty() ? null : attendances.get(attendances.size() - 1);
     }

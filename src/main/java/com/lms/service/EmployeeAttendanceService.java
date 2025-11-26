@@ -47,7 +47,7 @@ public class EmployeeAttendanceService {
         }
     }
 
-    public List<EmployeeAttendance> getEmployeeAttendance(String employeeId) {
+    public List<EmployeeAttendance> getEmployeeAttendance(Long employeeId) {
         return attendanceRepository.findByEmployeeId(employeeId);
     }
 
@@ -55,12 +55,12 @@ public class EmployeeAttendanceService {
         return attendanceRepository.findByAttendanceDate(date);
     }
 
-    public EmployeeAttendance getAttendanceByEmployeeAndDate(String employeeId, LocalDate date) {
+    public EmployeeAttendance getAttendanceByEmployeeAndDate(Long employeeId, LocalDate date) {
         List<EmployeeAttendance> attendances = attendanceRepository.findByEmployeeIdAndAttendanceDate(employeeId, date);
         return attendances.isEmpty() ? null : attendances.get(0);
     }
 
-    public EmployeeAttendance getLatestAttendanceByEmployeeAndDate(String employeeId, LocalDate date) {
+    public EmployeeAttendance getLatestAttendanceByEmployeeAndDate(Long employeeId, LocalDate date) {
         return attendanceRepository.findLatestByEmployeeIdAndDate(employeeId, date);
     }
 

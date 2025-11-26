@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface EmployeePrimaryInfoRepository extends JpaRepository<EmployeePrimaryInfo, Long> {
-    Optional<EmployeePrimaryInfo> findByEmployeeId(String employeeId);
     Optional<EmployeePrimaryInfo> findByUsername(String username);
 }

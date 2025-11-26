@@ -12,7 +12,7 @@ public class EmployeeContactInfo {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
+    private Long employeeId;
 
     private String contactType; // home, office, emergency
     private String phone;

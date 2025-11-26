@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface EmployeeContactInfoRepository extends JpaRepository<EmployeeContactInfo, Long> {
-    List<EmployeeContactInfo> findByEmployeeId(String employeeId);
+    List<EmployeeContactInfo> findByEmployeeId(Long employeeId);
 }
