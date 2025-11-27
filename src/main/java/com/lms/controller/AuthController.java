@@ -18,17 +18,37 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody EmployeePrimaryInfo employee) {
+    public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
+        System.out.println("Registration request received: " + request);
+        System.out.println("Username: " + request.getUsername());
+        System.out.println("Password: " + request.getPassword());
+        System.out.println("FirstName: " + request.getFirstName());
+        System.out.println("LastName: " + request.getLastName());
         try {
+            System.out.println("Registration attempt for user: " + request.getUsername());
+
             // Check if username already exists
-            if (service.findByUsername(employee.getUsername()).isPresent()) {
+            if (service.findByUsername(request.getUsername()).isPresent()) {
                 return ResponseEntity.badRequest().body("Username already exists");
             }
 
             // Create the employee
+            EmployeePrimaryInfo employee = new EmployeePrimaryInfo();
+            employee.setUsername(request.getUsername());
+            employee.setPassword(request.getPassword());
+            employee.setFirstName(request.getFirstName());
+            employee.setLastName(request.getLastName());
+            employee.setEmail(request.getEmail());
+            employee.setPhone(request.getPhone());
+            employee.setDateOfBirth(request.getDateOfBirth());
+            employee.setGender(request.getGender());
+            employee.setDepartment(request.getDepartment());
+            employee.setDesignation(request.getDesignation());
+
             EmployeePrimaryInfo created = service.createPrimaryInfo(employee);
             return ResponseEntity.ok("Employee registered successfully with ID: " + created.getId());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
         }
     }

@@ -21,6 +21,9 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    @Autowired
+    private RejectGetWithBodyFilter rejectGetWithBodyFilter;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,13 +46,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
+            // .addFilterBefore(rejectGetWithBodyFilter, org.springframework.security.web.authentication.www.BasicAuthenticationFilter.class)
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/**").permitAll()  // Public: login, register, password reset
-                .anyRequest().authenticated()  // Protected: All other endpoints require authentication
-            )
-            .httpBasic(basic -> basic
-                .realmName("LMS Employee Backend")
-            );  // Enable HTTP Basic Authentication for protected endpoints
+                .anyRequest().permitAll()  // Temporarily allow all requests
+            );
 
         return http.build();
     }

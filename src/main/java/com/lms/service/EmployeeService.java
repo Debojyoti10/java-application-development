@@ -53,6 +53,11 @@ public class EmployeeService {
     }
 
     public EmployeePrimaryInfo updatePrimaryInfo(EmployeePrimaryInfo info) {
+        // Preserve the existing password - don't allow password updates through this endpoint
+        Optional<EmployeePrimaryInfo> existing = primaryRepo.findById(info.getId());
+        if (existing.isPresent()) {
+            info.setPassword(existing.get().getPassword());
+        }
         return primaryRepo.save(info);
     }
 
