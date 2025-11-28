@@ -83,6 +83,17 @@ public class EmployeeController {
         return ResponseEntity.ok(service.updateEducation(info));
     }
 
+    @PutMapping("/education/{id}")
+    public ResponseEntity<EmployeeEducationInfo> updateEducationById(@PathVariable Long id, @RequestBody EmployeeEducationInfo info) {
+        info.setId(id);
+        return ResponseEntity.ok(service.updateEducation(info));
+    }
+
+    @PutMapping("/{employeeId}/education")
+    public ResponseEntity<EmployeeEducationInfo> updateEducationByEmployeeId(@PathVariable Long employeeId, @RequestBody EmployeeEducationInfo info) {
+        return ResponseEntity.ok(service.updateEducationByEmployeeId(employeeId, info));
+    }
+
     @DeleteMapping("/{employeeId}/education/{id}")
     public ResponseEntity<Void> deleteEducation(@PathVariable Long employeeId, @PathVariable Long id) {
         service.deleteEducation(employeeId, id);
@@ -105,6 +116,11 @@ public class EmployeeController {
         info.setId(id);
         info.setEmployeeId(employeeId);
         return ResponseEntity.ok(service.updateAddress(info));
+    }
+
+    @PutMapping("/{employeeId}/address")
+    public ResponseEntity<EmployeeAddressInfo> updateAddressByEmployeeId(@PathVariable Long employeeId, @RequestBody EmployeeAddressInfo info) {
+        return ResponseEntity.ok(service.updateAddressByEmployeeId(employeeId, info));
     }
 
     @DeleteMapping("/{employeeId}/address/{id}")
@@ -149,6 +165,11 @@ public class EmployeeController {
         return ResponseEntity.ok(service.updateExperience(info));
     }
 
+    @PutMapping("/{employeeId}/experience")
+    public ResponseEntity<EmployeeExperienceInfo> updateExperienceByEmployeeId(@PathVariable Long employeeId, @RequestBody EmployeeExperienceInfo info) {
+        return ResponseEntity.ok(service.updateExperienceByEmployeeId(employeeId, info));
+    }
+
     @DeleteMapping("/{employeeId}/experience/{id}")
     public ResponseEntity<Void> deleteExperience(@PathVariable Long employeeId, @PathVariable Long id) {
         service.deleteExperience(employeeId, id);
@@ -173,6 +194,11 @@ public class EmployeeController {
         return ResponseEntity.ok(service.updateSkill(info));
     }
 
+    @PutMapping("/{employeeId}/skills")
+    public ResponseEntity<EmployeeTechnicalSkillsInfo> updateSkillByEmployeeId(@PathVariable Long employeeId, @RequestBody EmployeeTechnicalSkillsInfo info) {
+        return ResponseEntity.ok(service.updateSkillByEmployeeId(employeeId, info));
+    }
+
     @DeleteMapping("/{employeeId}/skills/{id}")
     public ResponseEntity<Void> deleteSkill(@PathVariable Long employeeId, @PathVariable Long id) {
         service.deleteSkill(employeeId, id);
@@ -195,6 +221,11 @@ public class EmployeeController {
         info.setId(id);
         info.setEmployeeId(employeeId);
         return ResponseEntity.ok(service.updateContact(info));
+    }
+
+    @PutMapping("/{employeeId}/contact")
+    public ResponseEntity<EmployeeContactInfo> updateContactByEmployeeId(@PathVariable Long employeeId, @RequestBody EmployeeContactInfo info) {
+        return ResponseEntity.ok(service.updateContactByEmployeeId(employeeId, info));
     }
 
     @DeleteMapping("/{employeeId}/contact/{id}")

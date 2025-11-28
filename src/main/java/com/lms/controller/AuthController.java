@@ -32,10 +32,15 @@ public class AuthController {
                 return ResponseEntity.badRequest().body("Username already exists");
             }
 
-            // Create the employee
+            // Check if password already exists
+            if (service.passwordExists(request.getPassword())) {
+                return ResponseEntity.badRequest().body("Password already exists");
+            }
+
+            // Create the employee (password will be encoded in service)
             EmployeePrimaryInfo employee = new EmployeePrimaryInfo();
             employee.setUsername(request.getUsername());
-            employee.setPassword(request.getPassword());
+            employee.setPassword(request.getPassword()); // Plain password, will be encoded in service
             employee.setFirstName(request.getFirstName());
             employee.setLastName(request.getLastName());
             employee.setEmail(request.getEmail());

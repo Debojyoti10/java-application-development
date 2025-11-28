@@ -85,6 +85,9 @@ public class EmployeeService {
     }
 
     public EmployeeEducationInfo updateEducation(EmployeeEducationInfo info) {
+        if (info.getId() == null || !educationRepo.existsById(info.getId())) {
+            throw new RuntimeException("Education record not found");
+        }
         return educationRepo.save(info);
     }
 
@@ -104,6 +107,19 @@ public class EmployeeService {
 
     public List<EmployeeEducationInfo> getAllEducation() {
         return educationRepo.findAll();
+    }
+
+    public EmployeeEducationInfo updateEducationByEmployeeId(Long employeeId, EmployeeEducationInfo info) {
+        List<EmployeeEducationInfo> educations = educationRepo.findByEmployeeId(employeeId);
+        if (educations.isEmpty()) {
+            throw new RuntimeException("No education found for employee");
+        }
+        EmployeeEducationInfo existing = educations.get(0);
+        existing.setDegree(info.getDegree());
+        existing.setUniversity(info.getUniversity());
+        existing.setYearOfPassing(info.getYearOfPassing());
+        existing.setGrade(info.getGrade());
+        return educationRepo.save(existing);
     }
 
     // Address
@@ -132,6 +148,20 @@ public class EmployeeService {
         } else {
             throw new RuntimeException("Address record not found");
         }
+    }
+
+    public EmployeeAddressInfo updateAddressByEmployeeId(Long employeeId, EmployeeAddressInfo info) {
+        List<EmployeeAddressInfo> addresses = addressRepo.findByEmployeeId(employeeId);
+        if (addresses.isEmpty()) {
+            throw new RuntimeException("No address found for employee");
+        }
+        EmployeeAddressInfo existing = addresses.get(0);
+        existing.setAddressType(info.getAddressType());
+        existing.setStreet(info.getStreet());
+        existing.setCity(info.getCity());
+        existing.setState(info.getState());
+        existing.setZipCode(info.getZipCode());
+        return addressRepo.save(existing);
     }
 
     // Bank
@@ -176,6 +206,20 @@ public class EmployeeService {
         }
     }
 
+    public EmployeeExperienceInfo updateExperienceByEmployeeId(Long employeeId, EmployeeExperienceInfo info) {
+        List<EmployeeExperienceInfo> experiences = experienceRepo.findByEmployeeId(employeeId);
+        if (experiences.isEmpty()) {
+            throw new RuntimeException("No experience found for employee");
+        }
+        EmployeeExperienceInfo existing = experiences.get(0);
+        existing.setCompanyName(info.getCompanyName());
+        existing.setRole(info.getRole());
+        existing.setStartDate(info.getStartDate());
+        existing.setEndDate(info.getEndDate());
+        existing.setDescription(info.getDescription());
+        return experienceRepo.save(existing);
+    }
+
     // Skills
     public List<EmployeeTechnicalSkillsInfo> getSkills(Long employeeId) {
         return skillsRepo.findByEmployeeId(employeeId);
@@ -202,6 +246,17 @@ public class EmployeeService {
         } else {
             throw new RuntimeException("Skill record not found");
         }
+    }
+
+    public EmployeeTechnicalSkillsInfo updateSkillByEmployeeId(Long employeeId, EmployeeTechnicalSkillsInfo info) {
+        List<EmployeeTechnicalSkillsInfo> skills = skillsRepo.findByEmployeeId(employeeId);
+        if (skills.isEmpty()) {
+            throw new RuntimeException("No skills found for employee");
+        }
+        EmployeeTechnicalSkillsInfo existing = skills.get(0);
+        existing.setSkillName(info.getSkillName());
+        existing.setProficiency(info.getProficiency());
+        return skillsRepo.save(existing);
     }
 
     // Contact
@@ -232,9 +287,31 @@ public class EmployeeService {
         }
     }
 
+    public EmployeeContactInfo updateContactByEmployeeId(Long employeeId, EmployeeContactInfo info) {
+        List<EmployeeContactInfo> contacts = contactRepo.findByEmployeeId(employeeId);
+        if (contacts.isEmpty()) {
+            throw new RuntimeException("No contact found for employee");
+        }
+        EmployeeContactInfo existing = contacts.get(0);
+        existing.setContactType(info.getContactType());
+        existing.setPhone(info.getPhone());
+        existing.setEmail(info.getEmail());
+        return contactRepo.save(existing);
+    }
+
     // Authentication
     public Optional<EmployeePrimaryInfo> findByUsername(String username) {
         return primaryRepo.findByUsername(username);
+    }
+
+    public boolean passwordExists(String plainPassword) {
+        List<EmployeePrimaryInfo> allUsers = primaryRepo.findAll();
+        for (EmployeePrimaryInfo user : allUsers) {
+            if (passwordEncoder.matches(plainPassword, user.getPassword())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean resetPassword(Long id, String oldPassword, String newPassword) {

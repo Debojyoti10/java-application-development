@@ -1,5 +1,6 @@
 package com.lms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public class EmployeeSecondaryInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @Column(nullable = false)
     private Long employeeId;
 
