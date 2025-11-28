@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -46,10 +48,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
-            // .addFilterBefore(rejectGetWithBodyFilter, org.springframework.security.web.authentication.www.BasicAuthenticationFilter.class)
+            .addFilterBefore(rejectGetWithBodyFilter, org.springframework.security.web.authentication.www.BasicAuthenticationFilter.class)
             .authorizeHttpRequests(authz -> authz
-                .anyRequest().permitAll()  // Temporarily allow all requests
-            );
+                .requestMatchers("/api/auth/register").permitAll()
+                .anyRequest().authenticated()
+            )
+            .httpBasic(withDefaults());
 
         return http.build();
     }
