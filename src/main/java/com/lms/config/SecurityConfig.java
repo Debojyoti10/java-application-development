@@ -50,7 +50,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .addFilterBefore(rejectGetWithBodyFilter, org.springframework.security.web.authentication.www.BasicAuthenticationFilter.class)
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/register", "/api/employees/full").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(withDefaults());

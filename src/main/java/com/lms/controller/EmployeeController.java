@@ -6,8 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -17,9 +22,22 @@ public class EmployeeController {
     private EmployeeService service;
 
     // Primary Info
-    @PostMapping
-    public ResponseEntity<EmployeePrimaryInfo> createEmployee(@RequestBody EmployeePrimaryInfo info) {
-        return ResponseEntity.ok(service.createPrimaryInfo(info));
+    @PostMapping("/full")
+    public ResponseEntity<String> createFullEmployee(@RequestBody Map<String, Object> fullEmployeeData) {
+        // Check if users exist and require auth
+        if (service.getAllPrimaryInfo().size() > 0) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
+                return ResponseEntity.status(401).body("Authentication required for creating employee after first user");
+            }
+        }
+
+        try {
+            Long employeeId = service.createFullEmployee(fullEmployeeData);
+            return ResponseEntity.ok("Employee created successfully with ID: " + employeeId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error creating employee: " + e.getMessage());
+        }
     }
 
     @GetMapping
@@ -30,9 +48,24 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
-    public ResponseEntity<EmployeePrimaryInfo> getEmployee(@PathVariable Long employeeId) {
+    public ResponseEntity<Map<String, Object>> getEmployee(@PathVariable Long employeeId) {
         Optional<EmployeePrimaryInfo> opt = service.getPrimaryInfo(employeeId);
-        return opt.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        if (!opt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        EmployeePrimaryInfo primary = opt.get();
+        Map<String, Object> response = new HashMap<>();
+        response.put("primary", primary);
+        response.put("secondary", service.getSecondaryInfo(employeeId).orElse(null));
+        response.put("education", service.getEducation(employeeId));
+        response.put("address", service.getAddresses(employeeId));
+        response.put("bank", service.getBankDetails(employeeId).orElse(null));
+        response.put("experience", service.getExperience(employeeId));
+        response.put("skills", service.getSkills(employeeId));
+        response.put("contact", service.getContacts(employeeId));
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{employeeId}")

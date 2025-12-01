@@ -4,6 +4,9 @@ import com.lms.entity.EmployeePrimaryInfo;
 import com.lms.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
+        // Check if users exist and require auth
+        if (service.getAllPrimaryInfo().size() > 0) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
+                return ResponseEntity.status(401).body("Authentication required for registration after first user");
+            }
+        }
+
         System.out.println("Registration request received: " + request);
         System.out.println("Username: " + request.getUsername());
         System.out.println("Password: " + request.getPassword());

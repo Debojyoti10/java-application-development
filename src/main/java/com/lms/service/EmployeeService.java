@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @Service
 public class EmployeeService {
@@ -325,5 +327,125 @@ public class EmployeeService {
             }
         }
         return false;
+    }
+
+    // Create Full Employee
+    public Long createFullEmployee(Map<String, Object> fullEmployeeData) {
+        // Parse primary info
+        Map<String, Object> primaryData = (Map<String, Object>) fullEmployeeData.get("primary");
+        EmployeePrimaryInfo primary = new EmployeePrimaryInfo();
+        primary.setFirstName((String) primaryData.get("firstName"));
+        primary.setLastName((String) primaryData.get("lastName"));
+        primary.setEmail((String) primaryData.get("email"));
+        primary.setPhone((String) primaryData.get("phone"));
+        primary.setDateOfBirth(LocalDate.parse((String) primaryData.get("dateOfBirth")));
+        primary.setGender((String) primaryData.get("gender"));
+        primary.setDepartment((String) primaryData.get("department"));
+        primary.setDesignation((String) primaryData.get("designation"));
+        primary.setUsername((String) primaryData.get("username"));
+        primary.setPassword(passwordEncoder.encode((String) primaryData.get("password")));
+
+        // Check for duplicate username
+        if (primaryRepo.findByUsername(primary.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        EmployeePrimaryInfo savedPrimary = primaryRepo.save(primary);
+        Long employeeId = savedPrimary.getId();
+
+        // Parse and save secondary info
+        if (fullEmployeeData.containsKey("secondary")) {
+            Map<String, Object> secondaryData = (Map<String, Object>) fullEmployeeData.get("secondary");
+            EmployeeSecondaryInfo secondary = new EmployeeSecondaryInfo();
+            secondary.setEmployeeId(employeeId);
+            secondary.setJoiningDate(LocalDate.parse((String) secondaryData.get("joiningDate")));
+            secondary.setManagerId((String) secondaryData.get("managerId"));
+            secondary.setEmploymentType((String) secondaryData.get("employmentType"));
+            secondary.setSalary(((Number) secondaryData.get("salary")).doubleValue());
+            secondaryRepo.save(secondary);
+        }
+
+        // Parse and save education
+        if (fullEmployeeData.containsKey("education")) {
+            List<Map<String, Object>> educationList = (List<Map<String, Object>>) fullEmployeeData.get("education");
+            for (Map<String, Object> eduData : educationList) {
+                EmployeeEducationInfo education = new EmployeeEducationInfo();
+                education.setEmployeeId(employeeId);
+                education.setDegree((String) eduData.get("degree"));
+                education.setUniversity((String) eduData.get("university"));
+                education.setYearOfPassing(((Number) eduData.get("yearOfPassing")).intValue());
+                education.setGrade((String) eduData.get("grade"));
+                educationRepo.save(education);
+            }
+        }
+
+        // Parse and save address
+        if (fullEmployeeData.containsKey("address")) {
+            List<Map<String, Object>> addressList = (List<Map<String, Object>>) fullEmployeeData.get("address");
+            for (Map<String, Object> addrData : addressList) {
+                EmployeeAddressInfo address = new EmployeeAddressInfo();
+                address.setEmployeeId(employeeId);
+                address.setAddressType((String) addrData.get("addressType"));
+                address.setStreet((String) addrData.get("street"));
+                address.setCity((String) addrData.get("city"));
+                address.setState((String) addrData.get("state"));
+                address.setZipCode((String) addrData.get("zipCode"));
+                addressRepo.save(address);
+            }
+        }
+
+        // Parse and save bank
+        if (fullEmployeeData.containsKey("bank")) {
+            Map<String, Object> bankData = (Map<String, Object>) fullEmployeeData.get("bank");
+            EmployeeBankDetails bank = new EmployeeBankDetails();
+            bank.setEmployeeId(employeeId);
+            bank.setAccountNumber((String) bankData.get("accountNumber"));
+            bank.setAccountType((String) bankData.get("accountType"));
+            bank.setBankName((String) bankData.get("bankName"));
+            bank.setIfscCode((String) bankData.get("ifscCode"));
+            bankRepo.save(bank);
+        }
+
+        // Parse and save experience
+        if (fullEmployeeData.containsKey("experience")) {
+            List<Map<String, Object>> experienceList = (List<Map<String, Object>>) fullEmployeeData.get("experience");
+            for (Map<String, Object> expData : experienceList) {
+                EmployeeExperienceInfo experience = new EmployeeExperienceInfo();
+                experience.setEmployeeId(employeeId);
+                experience.setCompanyName((String) expData.get("companyName"));
+                experience.setRole((String) expData.get("role"));
+                experience.setStartDate(LocalDate.parse((String) expData.get("startDate")));
+                experience.setEndDate(expData.get("endDate") != null ? LocalDate.parse((String) expData.get("endDate")) : null);
+                experience.setDescription((String) expData.get("description"));
+                experienceRepo.save(experience);
+            }
+        }
+
+        // Parse and save skills
+        if (fullEmployeeData.containsKey("skills")) {
+            List<Map<String, Object>> skillsList = (List<Map<String, Object>>) fullEmployeeData.get("skills");
+            for (Map<String, Object> skillData : skillsList) {
+                EmployeeTechnicalSkillsInfo skill = new EmployeeTechnicalSkillsInfo();
+                skill.setEmployeeId(employeeId);
+                skill.setSkillName((String) skillData.get("skillName"));
+                skill.setProficiency((String) skillData.get("proficiency"));
+                skillsRepo.save(skill);
+            }
+        }
+
+        // Parse and save contact
+        if (fullEmployeeData.containsKey("contact")) {
+            List<Map<String, Object>> contactList = (List<Map<String, Object>>) fullEmployeeData.get("contact");
+            for (Map<String, Object> contData : contactList) {
+                EmployeeContactInfo contact = new EmployeeContactInfo();
+                contact.setEmployeeId(employeeId);
+                contact.setContactType((String) contData.get("contactType"));
+                contact.setPhone((String) contData.get("phone"));
+                contact.setEmail((String) contData.get("email"));
+                contactRepo.save(contact);
+            }
+        }
+
+        return employeeId;
     }
 }
